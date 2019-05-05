@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.imageio.ImageIO;
 
 
-//Same issues as commented in SoundEffects.java
+//Class responsible for loading and storing images for the game to use
 public class ImageLoader {
 	
 	private static ConcurrentHashMap<String, BufferedImage> images = new ConcurrentHashMap<>();
