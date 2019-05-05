@@ -3,6 +3,7 @@ package me.october.quickgame;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.BufferedInputStream;
 import java.util.Arrays;
 
 import javax.sound.sampled.AudioFormat;
@@ -13,9 +14,6 @@ import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-
-//Two issues. 1. Currently this only works in Eclipse/your IDE... because it requires files in the project folder.
-//2. If we use InputStream to read from the jar instead, AudioSystem throws an IOException because the "mark operation is not supported"
 public class SoundEffect {
 	
 	private byte[] data;
@@ -42,7 +40,10 @@ public class SoundEffect {
 			if (input instanceof File) {
 				stream = AudioSystem.getAudioInputStream((File)input);
 			} else if (input instanceof InputStream) {
-				stream = AudioSystem.getAudioInputStream((InputStream)input);
+				InputStream istream = (InputStream)input;
+				if (!istream.markSupported()) istream = new BufferedInputStream(istream);
+				//AudioInputStream requires mark supported, or throws an exception
+				stream = AudioSystem.getAudioInputStream(istream);
 			}
 			int available = stream.available();
 			int position = 0;
